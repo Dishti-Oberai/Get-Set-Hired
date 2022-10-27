@@ -41,7 +41,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'home'
+    'home',
+    # ************ LINKEDIN_OAUTH *************
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.linkedin_oauth2'
+    # ************ LINKEDIN_OAUTH *************
 ]
 
 MIDDLEWARE = [
@@ -123,9 +130,39 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")] # ************ STATIC FILES SETUP ************
 
-LOGIN_REDIRECT_URL = '/' # ************ LOGIN SETUP ***********
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# ********* LINKEDIN LOGIN SETUP *********
+LOGIN_REDIRECT_URL = '/'
+
+AUTHENTICATION_BACKENDS = [
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SITE_ID = 2
+ACCOUNT_LOGOUT_ON_GET= True
+SOCIALACCOUNT_LOGIN_ON_GET= True
+
+SOCIALACCOUNT_PROVIDERS = {
+    'linkedin': {
+        'SCOPE': [
+            'r_fullprofile',
+            'r_emailaddress'
+        ],
+        'PROFILE_FIELDS': [
+            'id',
+            'first-name',
+            'last-name',
+            'email-address',
+            'picture-url',
+            'public-profile-url',
+        ]
+    }
+}
+# Create site and social application in admin end also
+# ********* LINKEDIN LOGIN SETUP *********
